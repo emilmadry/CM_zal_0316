@@ -23,7 +23,7 @@ export class ProductPage {
         await expect(this.headingLocator).toContainText(productName);
     }
 
-    async clickBuyButton(productId) {
+    async clickAddToCartButton(productId) {
         await this.page.getByTestId(`buy-btn-${productId}`).click();
     }
 

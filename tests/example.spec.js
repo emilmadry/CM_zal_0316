@@ -36,7 +36,7 @@ allProducts.forEach(product => {
     await homePage.clickProductCard(testedProduct.id);
 
     await productPage.checkHeadingContainsProductName(testedProduct.name);
-    await productPage.clickBuyButton(testedProduct.id);
+    await productPage.clickAddToCartButton(testedProduct.id);
 
     await cart.expandCart();
     await cart.checkForProductInCart(testedProduct.name, testedProduct.id);
@@ -67,8 +67,9 @@ test('full e2e path', async ({ page }) => {
   await homePage.checkProductTitleById(testedProduct.id, testedProduct.name);
   await homePage.clickProductCard(testedProduct.id);
 
-  await productPage.checkHeadingContainsProductName(testedProduct.name);
-  await productPage.clickBuyButton(testedProduct.id);
+  await expect(productPage.headingLocator).toHaveText(testedProduct.name);
+
+  await productPage.clickAddToCartButton(testedProduct.id);
 
   await cart.expandCart();
   await cart.checkForProductInCart(testedProduct.name, testedProduct.id);

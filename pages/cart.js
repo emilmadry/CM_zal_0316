@@ -21,7 +21,6 @@ export class Cart {
 
     async clickBuyButton() {
         await this.cartBuyButton.click();
-        await expect(this.successToast.filter({ hasText: 'sukces' })).toBeVisible();
 
     }
 

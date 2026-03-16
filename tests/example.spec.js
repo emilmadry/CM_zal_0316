@@ -1,19 +1,36 @@
 // @ts-check
 import { test, expect } from '@playwright/test';
+import { HomePage } from '../pages/home';
+import { ProductPage } from '../pages/product';
+import { Cart } from '../pages/cart';
 
-test('has title', async ({ page }) => {
-  await page.goto('https://playwright.dev/');
 
-  // Expect a title "to contain" a substring.
-  await expect(page).toHaveTitle(/Playwright/);
+test('full e2e path', async ({ page }) => {
+  const homePage = new HomePage(page);
+  const productPage = new ProductPage(page);
+  const cart = new Cart(page);
+
+  const testedProduct = {
+    id: 3,
+    name: 'Peleryna Maskująca',
+    price: 349,
+  };
+
+  await homePage.goto();
+
+  await expect(page).toHaveTitle(homePage.pageTitle);
+
+  await homePage.checkProductTitleById(testedProduct.id, testedProduct.name);
+  await homePage.clickProductCard(testedProduct.id);
+
+  await productPage.checkHeadingContainsProductName(testedProduct.name);
+  await productPage.clickBuyButton(testedProduct.id);
+
+  await cart.expandCart();
+  await cart.checkForProductInCart(testedProduct.name, testedProduct.id);
+
+  await cart.clickBuyButton();
+  await expect(cart.successToast.filter({ hasText: cart.successMessage })).toBeVisible();
+
 });
 
-test('get started link', async ({ page }) => {
-  await page.goto('https://playwright.dev/');
-
-  // Click the get started link.
-  await page.getByRole('link', { name: 'Get started' }).click();
-
-  // Expects page to have a heading with the name of Installation.
-  await expect(page.getByRole('heading', { name: 'Installation' })).toBeVisible();
-});
